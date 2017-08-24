@@ -1,0 +1,196 @@
+<div id="main-container">
+      <img src="./dist/components/start/layout.jpg" />
+      <h1>
+            Welcome to Planning Poker! I created this small app for the Auth0 Guys!, I hope you like it!
+      </h1>
+      <p>You can download the code from Github, this app works with a server application running in nodejs and using 
+            socket.io for the realtime communication, in the front end I'm using KeplerJs. (A front end workflow I created
+            last year) see <a href="http://kepler.metacode.com.co/" target="_blank">http://kepler.metacode.com.co/</a>
+            I'm using WebTask for sending the session planning result to an email with sendgrid template.
+            I built this app from scratch, around 15 hours of development. Not sure if that is a lot of time, but I coded this in the last two nights.
+      </p>
+      <div class="new-session" ng-show="sessionId">
+            <p>Done! share this code to your team members and start the planning session! </p>
+            {{sessionId}}
+      </div>
+      <div layout="row" layout-margin layout-padding layout-xs="column">
+
+            <div flex class="start-container">
+                  <md-card-content>
+                        <h2>Join a session</h2>
+                        <p>You can join to an existing session here</p>
+                        <md-input-container class="md-block" flex-gt-xs>
+                              <label>Enter your name</label>
+                              <input ng-model="user">
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-xs>
+                              <label>Enter session id</label>
+                              <input ng-model="joinSessionId">
+                        </md-input-container>
+
+                  </md-card-content>
+                  <md-card-actions layout="column" layout-align="end end">
+                        <div flex>
+
+                              <md-button ng-click="join($event)" class="md-raised md-primary">Join</md-button>
+                        </div>
+
+                  </md-card-actions>
+            </div>
+
+            <div flex class="start-container">
+                  <md-card-content>
+                        <h2>Create new session</h2>
+                        <p>You can create a new session and share it with your team</p>
+
+                        <img src="./dist/components/start/team.png" style="height:200px;" />
+
+
+
+                  </md-card-content>
+                  <md-card-actions layout="column" layout-align="end end">
+                        <div flex>
+
+                              <md-button ng-click="createSession($event)" class="md-raised md-primary">
+                                    <span ng-show="creatingSession">Creating session, one moment</span>
+                                    <span ng-hide="creatingSession">Create</span></md-button>
+                        </div>
+
+                  </md-card-actions>
+            </div>
+      </div>
+
+
+      <div id="users">
+            <div ng-repeat="user in usersJoined.participants" class="connected-user">
+                
+                  <img ng-src="./dist/components/start/u{{user.pic}}.png" />
+                  <div> {{user.participant}}</div>
+            </div>
+
+      </div>
+      <div ng-show="usersJoined" class="action-start">
+            <img src="./dist/components/start/timer.png" />
+            <span>Please wait all your team members before start the voting session!</span>
+            <md-button ng-click="startSession($event)" class="md-raised md-primary">Start planning session</md-button>
+      </div>
+
+  
+</div>
+
+<div style="visibility: hidden">
+      <div class="md-dialog-container" id="cardsDialog">
+            <md-dialog>
+                  <md-toolbar>
+                        <div class="md-toolbar-tools">
+                              <h2>Start voting! (Session started by {{sessionDirector.director}})</h2>
+                              <span flex></span>
+                              
+                             
+                        </div>
+                  </md-toolbar>
+
+                  <md-dialog-content>
+                        <div id="users-voting" ng-class="{'selecting': selectedCard}" layout="row" layout-xs="column" layout-margin layout-padding layout-align="start center">
+                         <div ng-repeat="user in usersJoined.participants" class="connected-user-small" flex="10">
+                                      <img ng-hide="user.voted" class="waiting" src="./dist/components/start/loading.gif" />
+                                    <img ng-src="./dist/components/start/u{{user.pic}}.png" />
+                                    <div> {{user.participant}}</div>
+                                    <div ng-show="user.voted" class="user-voted">Voted</div>
+                              </div>
+                        </div>
+<div ng-show="selectedCard">
+
+        <img ng-src="./dist/components/start/{{selectedCard.card}}.png" class="selected-card" />
+</div>
+<div layout="row" layout-wrap layout-margin layout-xs="column" ng-class="{'selecting': selectedCard}">
+
+
+                        <div ng-repeat="card in cards" class="card-item" flex="10" flex-xs="40">
+                              <img ng-src="./dist/components/start/{{card}}.png" alt="{{card}}" ng-click="voteCard(card)" />
+                        </div>
+
+</div>
+
+                  </md-dialog-content>
+
+                  <md-dialog-actions layout="row">
+
+                        <span class="note">Cards design by <a href="https://github.com/redbooth/scrum-poker-cards" target="_blank">
+          https://github.com/redbooth/scrum-poker-cards</a>
+          </span>
+                        <span flex></span>
+                        <md-button ng-click="cardSelected($event)" class="md-raised md-primary md-button md-ink-ripple">
+                              Vote
+                        </md-button>
+                        <md-button ng-click="cancel()">
+                              Cancel
+                        </md-button>
+                  </md-dialog-actions>
+            </md-dialog>
+      </div>
+</div>
+
+
+<div style="visibility: hidden">
+      <div class="md-dialog-container" id="votesDialog">
+            <md-dialog>
+                  <md-toolbar>
+                        <div class="md-toolbar-tools">
+                              <h2>Session finished, all team members voted!</h2>
+                              <span flex></span>
+                              
+                             
+                        </div>
+                  </md-toolbar>
+
+                  <md-dialog-content>
+                   
+                        <div id="votes-result" layout="row" layout-xs="column" layout-margin layout-padding layout-align="start center">
+                         <div ng-repeat="user in votes"  flex="20" flex-xs="40" class="connected-user-small user-vote-result">
+                                    
+                                    <div class="user-vote-profile">
+                                    <img ng-src="./dist/components/start/u{{user.pic}}.png" />
+                                    <div> {{user.participant}}</div>
+                                    </div>
+                                   
+                                      <img class="card-item card-vote-result"  ng-src="./dist/components/start/{{user.selectedCard.card}}.png"  />
+                              </div>
+
+                              
+
+                        </div>
+<div id="email-result">
+                         <h2>Send result to email</h2>
+          <p>Powered by WebTask API, we're using sendgrid API to send this email!</p>
+          <img src="./dist/components/start/webtask.png" />
+          <div class="new-session" ng-show="sendEmailDone">
+                <p>Email sent!</p>
+          </div>
+                        <md-input-container class="md-block" flex-gt-xs>
+                              <label>Enter email address</label>
+                              <input ng-model="toEmail">
+                        </md-input-container>
+                         <md-button ng-click="sendResultToEmail($event)" class="md-raised md-primary md-button md-ink-ripple">
+                              <span ng-hide="sending">Send</span>
+                              <span ng-show="sending">Sending . . .</span>
+                        </md-button>
+
+</div>
+                                        
+
+
+                  </md-dialog-content>
+
+                  <md-dialog-actions layout="row">
+
+                      
+                        <span flex></span>
+                      
+                        <md-button ng-click="cancel()">
+                              Close
+                        </md-button>
+                  </md-dialog-actions>
+            </md-dialog>
+      </div>
+</div>

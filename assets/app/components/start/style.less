@@ -1,0 +1,144 @@
+#main-container
+{
+    max-width: 800px;
+    margin: 60px  auto;
+}
+
+.new-session
+{
+       background-color: rgba(50, 205, 104, 0.43);
+    padding: 10px;
+    border-left: solid 4px #1cbc41;
+}
+
+
+.connected-user
+{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    padding: 10px;
+    background-color: #bdbdbd;
+    float: left;
+    margin-left: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(224,224,224);
+    border-radius: 10px 10px 0px 0px;
+    cursor: pointer;
+}
+
+
+#users
+{
+    position: fixed;
+    bottom: 0;
+    z-index: 50;
+}
+
+.card-item
+{
+
+    background-color: #2196f3;
+    margin: 10px;
+    position: relative;
+    cursor: pointer;
+    width: 400px;
+
+    img{
+
+        width: 100%;
+    }
+
+    &:hover{
+
+        opacity: 0.5;
+        border: solid 3px #2196f3;
+    }
+
+    
+
+}
+
+.connected-user-small {
+    margin-right: 10px;
+    padding: 5px;
+    font-size: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.start-container
+{
+    border-left: solid 1px #cac9c9;
+    position: relative;
+    height: 400px;
+    box-shadow: 2px 2px 2px 2px #f3f3f3;
+}
+
+.action-start
+{
+       position: fixed;
+    top: 60px;
+    left: 0;
+    box-shadow: 2px 1px 6px 2px #c2bebe;
+    background-color: #e5e0e0;
+    padding: 5px;
+
+    img{
+        height: 50px;
+    }
+}
+
+.waiting
+{
+     position: absolute;
+    top: -16px;
+    height: 60px;
+}
+
+
+.selected-card
+{
+       height: 200px;
+    position: fixed;
+    box-shadow: 2px 2px 6px 2px #c4c0c0;
+    z-index: 50;
+    top: 68px;
+    background-color: #6fdf28;
+    left: 10px;
+    padding: 5px;
+}
+
+
+.selecting
+{
+    margin-left: 160px;
+}
+
+.user-voted
+{
+    background-color: #52be08;
+    color: #fff;
+}
+
+.user-vote-profile
+{
+    position: absolute;
+    padding: 10px;
+    box-shadow: 2px 2px 6px -1px #3f3c3c;
+    z-index: 5;
+    right: 0px;
+    background-color: #fff;
+    border-radius: 50px;
+    top: 26px;
+}
+
+.card-vote-result
+{
+    width: 200px;
+}
+
+#email-result
+{
+    padding:10px;
+    
+}
